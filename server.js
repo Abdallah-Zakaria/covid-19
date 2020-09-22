@@ -39,7 +39,6 @@ function homePage(req, res) {
 }
 
 function searche(req, res) {
-    dddd = []
     let { country, start, end } = req.body
     let url = `https://api.covid19api.com/country/${country}/status/confirmed?from=${start}T00:00:00Z&to=${end}T00:00:00Z`
     superagent.get(url)
@@ -58,13 +57,14 @@ function countryPage(req, res) {
         })
 }
 function saveIt(req, res) {
+    dddd = []
+    let { Country, TotalDeaths, TotalRecovered, TotalConfirmed, Date } = req.body
 
     let dataAPI = [Country, TotalDeaths, TotalRecovered, TotalConfirmed, Date]
     dataAPI.forEach(item => {
         new Covid(item)
     })
 
-    let { Country, TotalDeaths, TotalRecovered, TotalConfirmed, Date } = req.body
 
     let SQL = `INSERT INTO aww (country,totalDeaths,totalRecovered,totalConfirmed,date) VALUES ($1.$2,$3,$4,$5);`
     let VALUES = [dddd.Country, dddd.TotalDeaths, dddd.TotalRecovered, dddd.TotalConfirmed, dddd.Date]
