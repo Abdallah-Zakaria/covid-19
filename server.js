@@ -23,7 +23,9 @@ app.post("/search", searche)
 app.get("/allContry", countryPage)
 app.post("/save", saveIt)
 app.post("/myRecord", myRecordPage)
-app.get("/details/:id" , detailsPage )
+app.get("/details/:id", detailsPage)
+app.put("/updata/:id", update)
+app.delete("/delete/:id",deletee )
 //..handler
 function homePage(req, res) {
     let url = `https://api.covid19api.com/world/total`
@@ -47,7 +49,7 @@ function countryPage(req, res) {
     let url = `https://api.covid19api.com/summary`
     superagent.get(url)
         .then(result => {
-            let allCounty = result.body
+            let allCounty = result.body.Countries
             console.log(allCounty)
             res.render("pages/countryPage", { data: allCounty })
         })
@@ -69,9 +71,34 @@ function myRecordPage(req, res) {
             res.render("pages/myRecordPage", { data: myRecord })
         })
 }
-function detailsPage(req,res){
+function detailsPage(req, res) {
     let id = req.params.id
-    let SQL = 
+    let SQL = `SELECT * FROM aww WHERE id=$1;`
+    let VALUES = [id]
+    client.query(SQL, VALUES)
+        .then(result => {
+            let detailsData = result.rows[0]
+            res.render("pages/showDetailsDB", { data: detailsData })
+        })
+}
+function update(req, res) {
+    let id = req.params.id
+    let { Country, TotalDeaths, TotalRecovered, TotalConfirmed, Date } = req.body
+    let SQL = `UPDATE aww SET Country=$1,TotalDeaths=$2,TotalRecovered=$3,TotalConfirmed=$4,Date=$5 WHERE id=$6;`
+    let VALUES = [Country, TotalDeaths, TotalRecovered, TotalConfirmed, Date, id]
+    client.query(SQL, VALUES)
+        .then(() => {
+            res.redirect(`/details/${id}`)
+        })
+}
+function deletee(req,res){
+    let id = req.params.id
+    let SQL = `DELETE FROM aww WHERE id=$1;`
+    let VALUES=[id]
+    client.query(SQL,VALUES)
+    .then(()=>{
+        res.redirect("/myRecord")
+    })
 }
 //..else
 
