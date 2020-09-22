@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <a href="/allContry"> all country</a>
+        </nav>
+    </header>
+    <p>Home page</p>
+    <p>Totla Confiremd <%= data.TotalConfirmed%></p>
+    <p>Totla Deaths <%= data.TotalDeaths%></p>
+    <p>Total recoverd <%= data.TotalRecovered%></p>
+
+    <p>GET STATISTICS aspecifict county</p>
+    <form action="/search" method="post">
+        <input type="text" name="country" value="">
+        <input type="data" name="start" value="">
+        <input type="data" name="end" value="">
+        <button>Search</button>
+    </form>
+</body>
+
+</html>

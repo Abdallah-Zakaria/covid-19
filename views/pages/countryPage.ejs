@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <p>countryPage</p>
+    <% console.log(data) %>
+    <% data.forEach(item=>{ %>
+    <h2><%= item.Country%></h2>
+    <p><%= item.TotalConfirmed%></p>
+    <p><%= item.TotalDeaths%></p>
+    <p><%= item.TotalRecovered%></p>
+    <p><%= item.Date%></p>
+    <form action="/save" method="post"></form>
+    <input type="hidden" name="Country" value="<%= item.Country%>">
+    <input type="hidden" name="TotalDeaths" value="<%= item.TotalDeaths%>">
+    <input type="hidden" name="TotalRecovered" value="<%= item.TotalRecovered%>">
+    <input type="hidden" name="TotalConfirmed" value="<%= item.TotalConfirmed%>">
+    <input type="hidden" name="Date" value="<%= item.Date%>">
+
+    <button>Add to my record</button>
+    <% }) %>
+</body>
+
+</html>
