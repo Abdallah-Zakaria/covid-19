@@ -25,7 +25,9 @@ app.post("/save", saveIt)
 app.post("/myRecord", myRecordPage)
 app.get("/details/:id", detailsPage)
 app.put("/updata/:id", update)
-app.delete("/delete/:id",deletee )
+app.delete("/delete/:id", deletee)
+//..variable 
+let dddd = []
 //..handler
 function homePage(req, res) {
     let url = `https://api.covid19api.com/world/total`
@@ -37,8 +39,9 @@ function homePage(req, res) {
 }
 
 function searche(req, res) {
+    dddd = []
     let { country, start, end } = req.body
-    let url = `https://api.covid19api.com/country/south-africa/status/confirmed?from=2020-03-01T00:00:00Z&to=2020-04-01T00:00:00Z`
+    let url = `https://api.covid19api.com/country/${country}/status/confirmed?from=${start}T00:00:00Z&to=${end}T00:00:00Z`
     superagent.get(url)
         .then(result => {
             let statics = result.body
@@ -55,9 +58,16 @@ function countryPage(req, res) {
         })
 }
 function saveIt(req, res) {
+
+    let dataAPI = [Country, TotalDeaths, TotalRecovered, TotalConfirmed, Date]
+    dataAPI.forEach(item => {
+        new Covid(item)
+    })
+
     let { Country, TotalDeaths, TotalRecovered, TotalConfirmed, Date } = req.body
-    let SQL = `INSERT INTO aww (Country,TotalDeaths,TotalRecovered,TotalConfirmed,Date) VALUES ($1.$2,$3,$4,$5);`
-    let VALUES = [Country, TotalDeaths, TotalRecovered, TotalConfirmed, Date]
+
+    let SQL = `INSERT INTO aww (country,totalDeaths,totalRecovered,totalConfirmed,date) VALUES ($1.$2,$3,$4,$5);`
+    let VALUES = [dddd.Country, dddd.TotalDeaths, dddd.TotalRecovered, dddd.TotalConfirmed, dddd.Date]
     client.query(SQL, VALUES)
         .then(() => {
             res.redirect("/myRecord")
@@ -84,22 +94,33 @@ function detailsPage(req, res) {
 function update(req, res) {
     let id = req.params.id
     let { Country, TotalDeaths, TotalRecovered, TotalConfirmed, Date } = req.body
-    let SQL = `UPDATE aww SET Country=$1,TotalDeaths=$2,TotalRecovered=$3,TotalConfirmed=$4,Date=$5 WHERE id=$6;`
+    let SQL = `UPDATE aww SET country=$1,totalDeaths=$2,totalRecovered=$3,totalConfirmed=$4,date=$5 WHERE id=$6;`
     let VALUES = [Country, TotalDeaths, TotalRecovered, TotalConfirmed, Date, id]
     client.query(SQL, VALUES)
         .then(() => {
             res.redirect(`/details/${id}`)
         })
 }
-function deletee(req,res){
+function deletee(req, res) {
     let id = req.params.id
     let SQL = `DELETE FROM aww WHERE id=$1;`
-    let VALUES=[id]
-    client.query(SQL,VALUES)
-    .then(()=>{
-        res.redirect("/myRecord")
-    })
+    let VALUES = [id]
+    client.query(SQL, VALUES)
+        .then(() => {
+            res.redirect("/myRecord")
+        })
 }
+//..construtor
+
+function Covid(item) {
+    this.Country = item.Country
+    this.TotalDeaths = item.TotalDeaths
+    this.TotalRecovered = item.TotalRecovered
+    this.TotalConfirmed = item.TotalConfirmed
+    this.Date = item.Date
+    dddd.push(this)
+}
+
 //..else
 
 client.connect()

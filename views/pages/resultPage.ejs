@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
+
+    <%- include("../partial/head")%>
+
+
 <body>
     <%- include("../partial/header")%>
     <p>result Page</p>
-    <% console.log(data) %>
+    <% data.forEach(item=>{ %>
+        <p><%= item.Date%></p>
+        <p><%= item.Cases%></p>
+    <%  }) %>
+
 </body>
+
 </html>
